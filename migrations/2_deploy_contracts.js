@@ -1,5 +1,5 @@
-const Network = artifacts.require("Network");
+const Decentee = artifacts.require("Decentee");
 
 module.exports = function(deployer) {
-  deployer.deploy(Network);
+  deployer.deploy(Decentee);
 };
