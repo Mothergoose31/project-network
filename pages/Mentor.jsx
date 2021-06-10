@@ -1,8 +1,155 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar'
 import Head from 'next/head'
+import Web3 from 'web3';
+import Decentee from './abis/Decentee.json'
+import { Modal, Popover } from 'react-bootstrap';
 
-function Mentor() {
+
+
+
+const Mentor = () => {
+    
+    const [decentee, setDecentee ] = useState(null);
+    const [contractAddress, setContractAddress ] = useState();
+    const [mentorContractAddress, setMentorContractAddress ] = useState()
+    
+   
+
+    
+
+
+
+
+    
+//==============================================================================================================================
+
+
+  const loadWeb3 = async () => {
+
+    if(window.ethereum) {
+      window.web3 = new Web3(window.ethereum)
+      await window.ethereum.enable()
+    }
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider)
+    } else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMaask!')
+    }
+  }
+
+//==============================================================================================================================
+
+  const loadBlockchainData = async () => {
+    
+    const web3 = window.web3;
+
+    // Load account
+    const accounts = await web3.eth.getAccounts();
+
+    // set account number in state
+    setAccount(accounts[0])
+
+    // Get network id below
+    const networkId = await web3.eth.net.getId();
+
+    console.log(networkId)
+
+    // get network data based off network id
+    const networkData = Decentee.networks[networkId]
+
+
+
+    //If we get back network data base from network id
+    if(networkData) {
+
+      const decentee = new web3.eth.Contract(Decentee.abi, networkData.address)
+      setDecentee(decentee)
+
+   
+     
+      setLoading(false)
+      
+    } else {
+    window.alert('Decentragam contract not deployed to dectectd network')
+    }
+
+  }
+
+
+//==============================================================================================================================
+
+
+    const getContractAddress = (e) => {
+
+        setContractAddress(e.target.value)
+    }
+
+//==============================================================================================================================
+
+
+const btnGo = () => {
+   // this.uiBtnDeployPopover.hide();
+
+  //  this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
+    if (contractAddress === ""){
+        deployFreelancer();
+    }
+    else {
+       // this.retrieveFreelancer(this.uiTxtContractAddress);  
+    }
+  }
+
+
+
+
+
+
+//==============================================================================================================================
+
+
+// const deployFreelancer = () => {
+    
+//     freelancerContract = new web3.eth.Contract(decentee.abi);
+//     this.uiSpnLoad = document.getElementById("spn-load");
+//     this.uiConContract = document.getElementById("con-contract");
+//     this.uiLblContractAddress = document.getElementById("lbl-contract-address");
+//     this.uiLblFreelancerAddress = document.getElementById("lbl-freelancer-address");
+
+//     this.uiSpnLoad.classList.remove('d-none');
+//     this.freelancerContract.deploy({
+//       data: freelancerArtifact.bytecode,
+//       arguments: []
+//     }).send({
+//       from: this.account, 
+//     }, (error, transactionHash) => {})
+//     .on('error', (error) => { 
+//       console.log("error");            
+//     })
+//     .on('receipt', (receipt) => {
+//       console.log("DONE" + receipt.contractAddress); // contains the new contract address
+//       this.uiSpnLoad.classList.add('d-none');
+//       this.uiConContract.classList.remove('d-none');
+
+//       this.freelanceContractAddress = receipt.contractAddress;
+//       this.uiLblContractAddress.textContent = receipt.contractAddress;
+
+//       this.freelancerContract = new web3.eth.Contract(freelancerArtifact.abi, this.freelanceContractAddress);
+//       this.freelancerContract.methods.freelancerAddress().call().then((result) =>{
+//         this.uiLblFreelancerAddress.textContent = result;
+//       });
+
+//       this.freelancerContract.methods.projectState().call().then((result) =>{
+//         this.utilProjectStatus(0);
+//       });
+
+//       //update the ETH Value boxes
+//       this.utilGetEthValue();
+//       this.utilToggerActionBtns("freelancer");
+//     })
+//   }
+//==============================================================================================================================
+
     return (
         <>
         <Navbar/>
@@ -20,11 +167,11 @@ function Mentor() {
         <div class="row">
           <div class="col-8">
             <div class="input-group input-group-lg">
-              <input type="text" class="form-control" placeholder="Enter contract address or leave blank to deploy a new one" id="txt-contract-address" />
+              <input type="text" class="form-control" placeholder="Enter contract address or leave blank to deploy a new one" onChange={getContractAddress} />
             </div>
           </div>
           <div class="col-4">
-            <a tabindex="0"  class="btn btn-primary btn-lg" onclick="App.btnGo()" 
+            <a tabindex="0"  class="btn btn-primary btn-lg" onclick={btnGo()} 
             type="button" id="btn-Deploy"
             data-bs-toggle="popover" title="Error" 
             data-bs-content="Smart Contract Not Found"
@@ -133,9 +280,3 @@ function Mentor() {
 
 export default Mentor
 
-
-// <div>
-//             <Navbar  />
-
-//             <h1>Hello </h1>
-//         </div>
