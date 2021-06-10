@@ -7,6 +7,9 @@ import Navbar from './components/Navbar'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 
+// Components
+import SplashPage from './components/SplashPage'
+
 const Home = () => {
 
   const [account, setAccount ] = useState('');
@@ -90,7 +93,7 @@ const Home = () => {
       <Navbar account={account} />
 
       {loading
-          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+          ? <SplashPage/>
           :<>
           <Head>
             <title>Create Next App</title>
