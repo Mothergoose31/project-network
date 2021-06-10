@@ -92,7 +92,7 @@ const btnGo = () => {
    // this.uiBtnDeployPopover.hide();
 
   //  this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
-    if (contractAddress === ""){
+    if (contractAddress === "0"){
         deployFreelancer();
     }
     else {
