@@ -6,24 +6,24 @@ import Decentee from './abis/Decentee.json'
 import Navbar from './components/Navbar'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
-
-// Components
 import SplashPage from './components/SplashPage'
 
-const Home = () => {
 
-  const [account, setAccount ] = useState('');
-  const [decentee, setDecentee ] = useState(null);
-  const [loading, setLoading ] = useState(true);
+const Home = ({ account, decentee, loading }) => {
+
+
+
+
+  
 
 //==============================================================================================================================
 
-  useEffect(() => {
+  // useEffect(() => {
       
-  loadWeb3();
-  loadBlockchainData(); 
+  // loadWeb3();
+  // loadBlockchainData(); 
 
-  },[] )
+  // },[] )
 
 
 
@@ -31,56 +31,56 @@ const Home = () => {
 //==============================================================================================================================
 
 
-  const loadWeb3 = async () => {
+  // const loadWeb3 = async () => {
 
-    if(window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    } else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMaask!')
-    }
-  }
+  //   if(window.ethereum) {
+  //     window.web3 = new Web3(window.ethereum)
+  //     await window.ethereum.enable()
+  //   }
+  //   else if (window.web3) {
+  //     window.web3 = new Web3(window.web3.currentProvider)
+  //   } else {
+  //     window.alert('Non-Ethereum browser detected. You should consider trying MetaMaask!')
+  //   }
+  // }
 
 //==============================================================================================================================
 
-  const loadBlockchainData = async () => {
+  // const loadBlockchainData = async () => {
     
-    const web3 = window.web3;
+  //   const web3 = window.web3;
 
-    // Load account
-    const accounts = await web3.eth.getAccounts();
+  //   // Load account
+  //   const accounts = await web3.eth.getAccounts();
 
-    // set account number in state
-    setAccount(accounts[0])
+  //   // set account number in state
+  //   setAccount(accounts[0])
 
-    // Get network id below
-    const networkId = await web3.eth.net.getId();
+  //   // Get network id below
+  //   const networkId = await web3.eth.net.getId();
 
-    console.log(networkId)
+  //   console.log(networkId)
 
-    // get network data based off network id
-    const networkData = Decentee.networks[networkId]
+  //   // get network data based off network id
+  //   const networkData = Decentee.networks[networkId]
 
 
 
-    //If we get back network data base from network id
-    if(networkData) {
+  //   //If we get back network data base from network id
+  //   if(networkData) {
 
-      const decentee = new web3.eth.Contract(Decentee.abi, networkData.address)
-      setDecentee(decentee)
+  //     const decentee = new web3.eth.Contract(Decentee.abi, networkData.address)
+  //     setDecentee(decentee)
 
    
      
-      setLoading(false)
+  //     setLoading(false)
       
-    } else {
-    window.alert('Decentragam contract not deployed to dectectd network')
-    }
+  //   } else {
+  //   window.alert('Decentragam contract not deployed to dectectd network')
+  //   }
 
-  }
+  // }
 
 
 //==============================================================================================================================
@@ -102,7 +102,6 @@ const Home = () => {
             <h1 className={styles.title}>
               Welcome to <a href="https://nextjs.org">Decentee!</a>
             </h1>
-
       
 
             <div className={styles.grid}>
