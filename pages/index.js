@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useRouter} from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import Web3 from 'web3';

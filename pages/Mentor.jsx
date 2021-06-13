@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar'
+
 import Head from 'next/head'
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
+import Navbar from "../pages/index.js";
 
 
 
