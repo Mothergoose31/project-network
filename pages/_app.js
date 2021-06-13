@@ -6,9 +6,6 @@ import Decentee from './abis/Decentee.json'
 
 function MyApp({ Component, pageProps }) {
 
-  const [clickAmount, setClickAmount] = useState(0);
-
-  const increment = () => setClickAmount((amount) => amount + 1);
 
   const [account, setAccount ] = useState('');
   const [decentee, setDecentee ] = useState(null);
