@@ -4,6 +4,14 @@ import Head from "next/head";
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
 
+// @dev 
+//about the _app.js page
+// Next uses an implicit App component as
+// a wrapper over each page view that is used to initialize pages. 
+// By creating your own file in the root pages directory called _app.js, you can
+// override the default App functionality and add your own,  By controlling your 
+// own _app wrapper,you can Keep state when navigating pages, set up global styling, custom site-wide layouts like  navbarstyling 
+
 function MyApp({ Component, pageProps }) {
 
 
