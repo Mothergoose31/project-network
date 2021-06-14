@@ -181,6 +181,7 @@ const btnGo = () => {
       console.log( newFreelancerContract)
 
       newFreelancerContract.methods.decenteeAddress().call().then((result) =>{
+        setMentorContractAddress(result)
         console.log(result)
         uiLblFreelancerAddress = result;
       });
@@ -339,8 +340,8 @@ const btnGo = () => {
       <div className="row">
         <div className="col-6">
           <ul className="list-group">
-            <li className="list-group-item"><span className="fw-bold">Address: </span><span id="lbl-contract-address"></span></li>
-            <li className="list-group-item"><span className="fw-bold">Freelancer's Wallet: </span><span id="lbl-freelancer-address"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Address: {contractAddresss} </span><span id="lbl-contract-address"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Freelancer's Wallet: {mentorContractAddress} </span><span id="lbl-freelancer-address"></span></li>
             <li className="list-group-item"><span className="fw-bold">Client's Wallet: </span><span id="lbl-client-address" /></li>
             <li className="list-group-item"><span className="fw-bold">Project State: </span><span className="badge" id="lbl-project-status"></span></li>
           </ul>
