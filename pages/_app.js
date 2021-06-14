@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import Head from "next/head";
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
+import Navbar from './components/Navbar'
 
 // @dev 
 //about the _app.js page
@@ -84,6 +85,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
+     <Navbar account={account} />
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 

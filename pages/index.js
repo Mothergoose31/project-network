@@ -4,7 +4,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
-import Navbar from './components/Navbar'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 import SplashPage from './components/SplashPage'
@@ -13,7 +12,7 @@ import SplashPage from './components/SplashPage'
 const Home = ({ account, decentee, loading }) => {
   return (
     <div className={styles.container}>
-    <Navbar account={account} />
+ 
     {loading ? <SplashPage/>
         :<>
           <Head>
@@ -31,10 +30,12 @@ const Home = ({ account, decentee, loading }) => {
                 <p>Find in-depth information about Next.js features and API.</p>
               </a>
             </Link>
-            <a href="https://nextjs.org/learn" className={styles.card}>
-              <h2>Mentee &rarr;</h2>
-              <p>Learn about Next.js in an interactive course with quizzes!</p>
+            <Link href="/Mentee">
+                <a className={styles.card}>
+                <h2>Mentee &rarr;</h2>
+                <p>Learn about Next.js in an interactive course with quizzes!</p>
             </a>
+            </Link>
           </div>
           
         </main>
