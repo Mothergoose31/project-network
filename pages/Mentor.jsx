@@ -8,6 +8,7 @@ import { Modal, Popover } from 'react-bootstrap';
 
 
 
+
 const Mentor = ({ account, decentee }) => {
     
   
@@ -18,84 +19,11 @@ const Mentor = ({ account, decentee }) => {
 
     //console.log("contract", contractAddresss)
     
-   
     const toggle = () => setPopoverOpen(!popoverOpen);
-    
-//==============================================================================================================================
-
-
-
-    // useEffect(() => {
-      
-    //     loadWeb3();
-    //     loadBlockchainData(); 
-      
-    //     },[] )
-      
-
-    
-//==============================================================================================================================
-
-
-  // const loadWeb3 = async () => {
-
-  //   if(window.ethereum) {
-  //     window.web3 = new Web3(window.ethereum)
-  //     await window.ethereum.enable()
-  //   }
-  //   else if (window.web3) {
-  //     window.web3 = new Web3(window.web3.currentProvider)
-  //   } else {
-  //     window.alert('Non-Ethereum browser detected. You should consider trying MetaMaask!')
-  //   }
-  // }
-
-//==============================================================================================================================
-
-  // const loadBlockchainData = async () => {
-    
-  //   const web3 = window.web3;
-
-  //   // Load account
-  //   const accounts = await web3.eth.getAccounts();
-
-  //   // set account number in state
-  //   setAccount(accounts[0])
-
-  //   // Get network id below
-  //   const networkId = await web3.eth.net.getId();
-
-  //   console.log(networkId)
-
-  //   // get network data based off network id
-  //   const networkData = Decentee.networks[networkId]
-
-
-
-  //   //If we get back network data base from network id
-  //   if(networkData) {
-
-  //     const decentee = new web3.eth.Contract(Decentee.abi, networkData.address)
-  //     setDecentee(decentee)
-
-   
-     
-  //     setLoading(false)
-      
-  //   } else {
-  //   window.alert('Decentragam contract not deployed to dectectd network')
-  //   }
-
-  // }
-
-
-//==============================================================================================================================
-
-
     const getContractAddress = (e) => {
 
-       
-        setMentorContractAddress(e.target.value)
+      setMentorContractAddress(e.target.value)
+
     }
 
 //==============================================================================================================================
@@ -305,14 +233,14 @@ const btnGo = () => {
         <br />
         
         <Head>
-            <title>Freelancer Smart Contract - For Freelancer</title>
+            <title>Coaching Smart Contract - For Developers that would a more expereinced dev to talk to / look at their code </title>
         </Head>
 
         
 
     <div className="p-1 mb-1 bg-light bg-gradient rounded-3">
       <div className="container-fluid py-3">
-        <h1 className="display-7 fw-bold">Freelancer Smart Contract</h1>
+        <h1 className="display-7 fw-bold">Coaching Smart Contract</h1>
         <p className="col-md-8 fs-4">This is the freelancer's Distributed App</p>
         <div className="row">
           <div className="col-8">
@@ -340,10 +268,10 @@ const btnGo = () => {
       <div className="row">
         <div className="col-6">
           <ul className="list-group">
-            <li className="list-group-item"><span className="fw-bold">Address: {contractAddresss} </span><span id="lbl-contract-address"></span></li>
-            <li className="list-group-item"><span className="fw-bold">Freelancer's Wallet: {mentorContractAddress} </span><span id="lbl-freelancer-address"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Contract Address: {contractAddresss} </span><span id="lbl-contract-address"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Instructors Address: {mentorContractAddress} </span><span id="lbl-freelancer-address"></span></li>
             <li className="list-group-item"><span className="fw-bold">Client's Wallet: </span><span id="lbl-client-address" /></li>
-            <li className="list-group-item"><span className="fw-bold">Project State: </span><span className="badge" id="lbl-project-status"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Coaching-Date: </span><span className="badge" id="lbl-project-status"></span></li>
           </ul>
         </div>
         <div className="col-3">
