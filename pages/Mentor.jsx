@@ -14,11 +14,12 @@ const Mentor = ({ account, decentee }) => {
     const [contractAddresss, setContractAddresss ] = useState("");
     const [mentorContractAddress, setMentorContractAddress ] = useState("")
     const [projectState, setProjectState] = useState(null)
+    const [popoverOpen, setPopoverOpen] = useState(false);
 
     //console.log("contract", contractAddresss)
     
    
-
+    const toggle = () => setPopoverOpen(!popoverOpen);
     
 //==============================================================================================================================
 
@@ -144,19 +145,15 @@ const btnGo = () => {
 
     
     var freelancerContract = decentee;
-    
-    
-   // console.log(freelancerContract)
-
-    // console.log("freelance",freelancerContract)
-    // this.uiSpnLoad = document.getElementById("spn-load");
-    // this.uiConContract = document.getElementById("con-contract");
+    var uiSpnLoad = document.getElementById("spn-load");
+    var uiConContract = document.getElementById("con-contract");
     var uiLblContractAddress = contractAddresss
     var uiLblFreelancerAddress = mentorContractAddress
 
 
     
-    // this.uiSpnLoad.classNameList.remove('d-none');
+    uiSpnLoad.classList.remove('d-none');
+
     freelancerContract.deploy({
       data: DecenteeArtifact.bytecode,
       arguments: []
@@ -171,8 +168,8 @@ const btnGo = () => {
       setContractAddresss(receipt.contractAddress)
       
       
-      // this.uiSpnLoad.classList.add('d-none');
-      // this.uiConContract.classList.remove('d-none');
+      uiSpnLoad.classList.add('d-none');
+      uiConContract.classList.remove('d-none');
       
       
       var freelanceContractAddress = receipt.contractAddress;
