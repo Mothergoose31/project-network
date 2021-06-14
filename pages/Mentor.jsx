@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
 import Head from 'next/head'
 import Web3 from 'web3';
 import DecenteeArtifact from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
-import Navbar from "../pages/index.js";
+
 
 
 
@@ -182,7 +181,7 @@ const btnGo = () => {
       
       var newFreelancerContract = new web3.eth.Contract( DecenteeArtifact.abi, freelanceContractAddress);
 
-      console.log(newFreelancerContract)
+      console.log( newFreelancerContract)
 
       newFreelancerContract.methods.decenteeAddress().call().then((result) =>{
         console.log(result)
@@ -305,8 +304,8 @@ const btnGo = () => {
 
     return (
         <>
-        <Navbar account={account}/>
         <br />
+        
         <Head>
             <title>Freelancer Smart Contract - For Freelancer</title>
         </Head>
@@ -425,11 +424,12 @@ const btnGo = () => {
     </div>
 
     
-
+ 
   
   </>
     )
 }
 
 export default Mentor
+
 
