@@ -6,21 +6,45 @@ import { Modal, Popover } from 'react-bootstrap';
 
 
 
+  //ui declarations
+  // uiSpnLoad:null,
+  // uiSpnAddSchedule: null,
+  // uiConContract:null,
+  // uiSpnContractAction: null,
+  // uiLblContractAddress:null,
+  // uiLblFreelancerAddress:null,
+  // uiTxtContractAddress:null,
+  // uiLblClientAddress: null,
+  // uiLblProjectState:null,
+  // scheduleModal: null,
+  // uiTxtShortCode: null,
+  // uiTxtScheduleDescription: null,
+  // uiTxtScheduleValue: null,
+  // uiTblScheduleTable: null,
+  // uiTblScheduleTableBody: null,
+  // uiBtnDeploy: null,
+  // uiBtnDeployPopover: null,
+  // uiLblTotalEth: null,
+  // uiLblDisbursedEth: null,
+  // uiBtnAcceptProject: null,
+  // uiBtnAddSchedule: null,
+  // uiBtnEndProject: null,
 
-
-
-const Mentor = ({ account, decentee }) => {
+  const Mentor = ({ account, decentee }) => {
     
   
     const [contractAddresss, setContractAddresss ] = useState("");
     const [mentorContractAddress, setMentorContractAddress ] = useState("")
     const [projectState, setProjectState] = useState(null)
     const [scheduleModal, setScheduleModal] = useState(null)
-//========================================================================
+    //========================================================================
     const [shortCode, setShortCode] = useState("")
     const [modalDescription, setModalDescription] = useState("")
     const [ethValue, setEthValue] = useState("")
 
+    const [uiLblTotalEth, setUiLblTotalEth ] = useState(null)
+    const [uiLblDisbursedEth, setUiLblDisbursedEth ] = useState(null)
+    var freelancerContractStatus = null;
 
 
    // const [popoverOpen, setPopoverOpen] = useState(false);
@@ -32,7 +56,7 @@ const Mentor = ({ account, decentee }) => {
 //==============================================================================================================================
 const getContractAddress = (e) => {
   
-  setMentorContractAddress(e.target.value)
+  setContractAddresss(e.target.value)
 
 }
 
@@ -111,14 +135,14 @@ const btnGo = () => {
 
   
 const utilGetEthValue = async () => {
-    var uiLblTotalEth = document.getElementById("lbl-total-eth");
-    var uiLblDisbursedEth = document.getElementById("lbl-disbursed-eth");
-
     let totalRow;
     let totalDisbursed=0;
     let totalValue = 0;
 
     await decentee.methods.totalSchedules().call().then((result) => {
+
+      console.log("eth value", result)
+
       totalRow = result;
     });
 
@@ -131,8 +155,8 @@ const utilGetEthValue = async () => {
       });
     }
 
-    uiLblTotalEth.innerHTML = Math.round(totalValue*100)/100;
-    uiLblDisbursedEth.innerHTML = Math.round(totalDisbursed*100)/100;
+    setUiLblTotalEth(Math.round(totalValue*100)/100);
+    setUiLblDisbursedEth(Math.round(totalDisbursed*100)/100);
   }
   
 
@@ -190,7 +214,7 @@ const utilGetEthValue = async () => {
       });
       
       //update the ETH Value boxes
-      //this.utilGetEthValue();
+        utilGetEthValue();
       //this.utilToggerActionBtns("freelancer");
     })
     
@@ -314,19 +338,19 @@ const utilAddScheduleToTable = (shortcode, description, value, state, action, sc
 
   td = document.createElement("td");
   //let client fund this if (a) it's the client (b) schedule is not funded (c) project is accepted
-  if (action === "client" && state == 0 && this.freelancerContractStatus == 1){
+  if (action === "client" && state == 0 && freelancerContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnFundSchedule('+ value/1000000000000000000 + ',' + scheduleID + ')" class="btn btn-primary btn-sm">Fund</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "freelancer" && state == 1 && this.freelancerContractStatus == 1){
+  else if (action === "freelancer" && state == 1 && freelancerContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnStartSchedule(' + scheduleID + ')" class="btn btn-success btn-sm">Start Work</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "client" && state == 2 && this.freelancerContractStatus == 1){
+  else if (action === "client" && state == 2 && freelancerContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnApproveSchedule(' + scheduleID + ')" class="btn btn-warning btn-sm">Approve</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "freelancer" && state == 3 && this.freelancerContractStatus == 1){
+  else if (action === "freelancer" && state == 3 && freelancerContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnReleaseFunds(' + scheduleID + ')" class="btn btn-info btn-sm">Release Funds</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
@@ -447,7 +471,7 @@ const btnAddSchedule = async () =>{
           <div className="card">
               <div className="card-header fw-bold text-center">Total Value (ETH)</div>
               <div className="card-body">
-              <p className="card-text text-center"><span className="fs-1" id="lbl-total-eth"></span></p>
+              <p className="card-text text-center"><span className="fs-1" id="lbl-total-eth">  {uiLblTotalEth}    </span></p>
             </div>
           </div>
         </div>
@@ -455,7 +479,7 @@ const btnAddSchedule = async () =>{
           <div className="card">
             <div className="card-header fw-bold text-center">Disbursed (ETH)</div>
             <div className="card-body">
-            <p className="card-text text-center"><span className="fs-1" id="lbl-disbursed-eth"></span></p>
+            <p className="card-text text-center"><span className="fs-1" id="lbl-disbursed-eth"> {uiLblDisbursedEth} </span></p>
           </div>
         </div>
         </div>
