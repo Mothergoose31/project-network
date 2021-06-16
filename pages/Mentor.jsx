@@ -44,6 +44,8 @@ import { Modal, Popover } from 'react-bootstrap';
 
     const [uiLblTotalEth, setUiLblTotalEth ] = useState(null)
     const [uiLblDisbursedEth, setUiLblDisbursedEth ] = useState(null)
+
+
     var freelancerContractStatus = null;
 
 
@@ -99,7 +101,7 @@ const btnGo = () => {
         deployFreelancer();
     }
     else {
-       // this.retrieveFreelancer(this.uiTxtContractAddress);  
+       retrieveFreelancer(contractAddresss);  
     }
   }
 
@@ -158,7 +160,89 @@ const utilGetEthValue = async () => {
     setUiLblTotalEth(Math.round(totalValue*100)/100);
     setUiLblDisbursedEth(Math.round(totalDisbursed*100)/100);
   }
+
+//==============================================================================================================================
+
+  const utilRefreshScheduleTable = async () => {
+    console.log("freelancer table refresh");
+    var uiTblScheduleTable = document.getElementById("tbl-schedule-table"); 
+        uiTblScheduleTable.classList.remove('d-none');  
+
+    while (uiTblScheduleTable.rows[1]){
+      uiTblScheduleTable.deleteRow(1);
+    }
+
+    let totalRow;
+
+    await decentee.methods.totalSchedules().call().then((result) => {
+      totalRow = result;
+    });
+
+    for (let i=0; i<= totalRow-1; i++){
+      await decentee.methods.scheduleRegister(i).call().then((result)=>{
+        utilAddScheduleToTable(result["shortCode"], result["description"], result["value"], result["scheduleState"], "freelancer", i);
+      });
+    }
+
+    //update the ETH Value boxes
+    await utilGetEthValue();
+    //this.utilToggerActionBtns("freelancer");
+  }
   
+
+//==============================================================================================================================
+
+const utilRefreshHeader = async (ContractAddress) => {
+  const web3 = window.web3;
+  var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, ContractAddress);
+  var uiConContract = document.getElementById("con-contract");
+ 
+  
+ // this.uiLblClientAddress = document.getElementById("lbl-client-address");
+
+    uiConContract.classList.remove('d-none');
+
+    setContractAddresss(ContractAddress);
+
+    console.log("207",freelancerContract.methods)
+
+    await freelancerContract.methods.decenteeAddress().call().then((result) =>{
+      setMentorContractAddress(result);
+    });
+
+    // await freelancerContract.methods.clientAddress().call().then((result) =>{
+    //   this.uiLblClientAddress.textContent = result;
+    // });
+
+    await freelancerContract.methods.projectState().call().then((result) =>{
+        freelancerContractStatus = result;
+        utilProjectStatus(parseInt(result));
+    });
+
+}
+
+
+
+//==============================================================================================================================
+
+
+
+
+const retrieveFreelancer = (ContractAddress, who="freelancer") => {
+    try {
+          utilRefreshHeader(ContractAddress);
+        if (who === "freelancer"){
+          utilRefreshScheduleTable();
+        }
+        else{
+          //this.utilRefreshScheduleTableClient();
+        }
+        //this.uiBtnDeployPopover.hide();
+    } catch (error) {
+      console.log(error)
+      //this.uiBtnDeployPopover.show();
+    }
+  }
 
 
 
@@ -378,7 +462,7 @@ const btnAddSchedule = async () =>{
     var uiSpnAddSchedule = document.getElementById("spn-add-schedule");
         uiSpnAddSchedule.classList.remove('d-none');
    // this.utilToggerAllButtonOnOff(0);
-   console.log(freelancerContract.methods)
+   //console.log(freelancerContract.methods)
 
     freelancerContract.methods.addSchedule(shortCode, modalDescription, web3.utils.toWei(ethValue, 'ether')).send({from: account})
     .on('error', function(error, receipt) {
