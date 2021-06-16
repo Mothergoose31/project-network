@@ -87,6 +87,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
      <Navbar account={account} className={styles.navbar} />
+     <br/>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
