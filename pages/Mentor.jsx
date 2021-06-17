@@ -12,7 +12,6 @@ import { Modal, Popover } from 'react-bootstrap';
 // ⭕ == is working but can be optimized 
 //❌ == is commeted out , needs to worked on... probably
 //==============================================================================================================================
-
 // ✅uiSpnLoad:null,
 //⭕ uiSpnAddSchedule: null,
 // ⭕uiConContract:null,
@@ -35,7 +34,6 @@ import { Modal, Popover } from 'react-bootstrap';
 // ❌uiBtnAcceptProject: null,===========>  MISSING FROM THE CODE
 // ❌uiBtnAddSchedule: null,===========>  MISSING FROM THE CODE
 // ❌uiBtnEndProject: null,===========>  MISSING FROM THE CODE
-
 //==============================================================================================================================
 
 const Mentor = ({ account, decentee }) => {
