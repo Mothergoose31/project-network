@@ -36,7 +36,7 @@ import { Modal, Popover } from 'react-bootstrap';
     
   
     const [contractAddresss, setContractAddresss ] = useState("");
-    const [mentorContractAddress, setMentorContractAddress ] = useState("")
+    const [mentorAddress, setMentorAddress ] = useState("")
     const [projectState, setProjectState] = useState(null)
     const [scheduleModal, setScheduleModal] = useState(null)
     //========================================================================
@@ -48,7 +48,7 @@ import { Modal, Popover } from 'react-bootstrap';
     const [uiLblDisbursedEth, setUiLblDisbursedEth ] = useState(null)
 
 
-    var freelancerContractStatus = null;
+    var decenteeContractStatus = null;
 
 
    // const [popoverOpen, setPopoverOpen] = useState(false);
@@ -101,12 +101,13 @@ const btnGo = () => {
   //  this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
     if (contractAddresss == ""){
         deployFreelancer();
+        
+      }
+      else {
+        retrieveFreelancer(contractAddresss);  
+      }
     }
-    else {
-       retrieveFreelancer(contractAddresss);  
-    }
-  }
-
+    
 
 
 //==============================================================================================================================
@@ -182,13 +183,13 @@ const utilGetEthValue = async () => {
 
     for (let i=0; i<= totalRow-1; i++){
       await decentee.methods.scheduleRegister(i).call().then((result)=>{
-        utilAddScheduleToTable(result["shortCode"], result["description"], result["value"], result["scheduleState"], "freelancer", i);
+        utilAddScheduleToTable(result["shortCode"], result["description"], result["value"], result["scheduleState"], "mentor", i);
       });
     }
 
     //update the ETH Value boxes
     await utilGetEthValue();
-    //this.utilToggerActionBtns("freelancer");
+    utilToggerActionBtns("mentor");
   }
   
 
@@ -206,10 +207,10 @@ const utilRefreshHeader = async (ContractAddress) => {
 
     setContractAddresss(ContractAddress);
 
-    console.log("207",freelancerContract.methods)
+    //console.log("207",freelancerContract.methods)
 
     await freelancerContract.methods.decenteeAddress().call().then((result) =>{
-      setMentorContractAddress(result);
+      setMentorAddress(result);
     });
 
     // await freelancerContract.methods.clientAddress().call().then((result) =>{
@@ -217,7 +218,7 @@ const utilRefreshHeader = async (ContractAddress) => {
     // });
 
     await freelancerContract.methods.projectState().call().then((result) =>{
-        freelancerContractStatus = result;
+        decenteeContractStatus = result;
         utilProjectStatus(parseInt(result));
     });
 
@@ -230,10 +231,10 @@ const utilRefreshHeader = async (ContractAddress) => {
 
 
 
-const retrieveFreelancer = (ContractAddress, who="freelancer") => {
+const retrieveFreelancer = (ContractAddress, who="mentor") => {
     try {
           utilRefreshHeader(ContractAddress);
-        if (who === "freelancer"){
+        if (who === "mentor"){
           utilRefreshScheduleTable();
         }
         else{
@@ -253,17 +254,17 @@ const retrieveFreelancer = (ContractAddress, who="freelancer") => {
     const web3 = window.web3;
 
     
-    var freelancerContract = decentee;
+   // var freelancerContract = decentee;
     var uiSpnLoad = document.getElementById("spn-load");
     var uiConContract = document.getElementById("con-contract");
     var uiLblContractAddress = contractAddresss
-    var uiLblFreelancerAddress = mentorContractAddress
+    var uiLblFreelancerAddress = mentorAddress
 
 
     
     uiSpnLoad.classList.remove('d-none');
 
-    freelancerContract.deploy({
+    decentee.deploy({
       data: DecenteeArtifact.bytecode,
       arguments: []
     }).send({
@@ -281,27 +282,27 @@ const retrieveFreelancer = (ContractAddress, who="freelancer") => {
       uiConContract.classList.remove('d-none');
       
       
-      var freelanceContractAddress = receipt.contractAddress;
+      var decenteeContractAddress = receipt.contractAddress;
       
       uiLblContractAddress = receipt.contractAddress;
       
-      var newFreelancerContract = new web3.eth.Contract( DecenteeArtifact.abi, freelanceContractAddress);
+      var newDecenteeContract = new web3.eth.Contract( DecenteeArtifact.abi, decenteeContractAddress);
 
-      //console.log( newFreelancerContract)
+      //console.log( newDecenteeContract)
 
-      newFreelancerContract.methods.decenteeAddress().call().then((result) =>{
-        setMentorContractAddress(result)
+      newDecenteeContract.methods.decenteeAddress().call().then((result) =>{
+        setMentorAddress(result)
       //  console.log(result)
         uiLblFreelancerAddress = result;
       });
       
-      newFreelancerContract.methods.projectState().call().then((result) =>{
+      newDecenteeContract.methods.projectState().call().then((result) =>{
         utilProjectStatus(0);
       });
       
       //update the ETH Value boxes
         utilGetEthValue();
-      //this.utilToggerActionBtns("freelancer");
+        utilToggerActionBtns("mentor");
     })
     
   }
@@ -315,23 +316,61 @@ const retrieveFreelancer = (ContractAddress, who="freelancer") => {
 
 
 
+const utilToggerActionBtns = async (who) => {
+  if (who == "mentor"){
+    var uiBtnAddSchedule = document.getElementById("btn-Add-Schedule");
+    var uiBtnEndProject = document.getElementById("btn-End-Project");
 
-// const btnEndProject = async () => {
-//   this.uiSpnContractAction  = document.getElementById("spn-contract-action");
-//   this.uiSpnContractAction.classList.remove('d-none');
-//   this.utilToggerAllButtonOnOff(0);
-//   this.freelancerContract.methods.endProject().send({from: this.account})
-//   .on('error', function(error, receipt) { 
-//     App.uiSpnContractAction.classList.add('d-none');
-//     App.utilToggerAllButtonOnOff(1);
-//   })
-//   .then((result) => {
-//     this.utilRefreshHeader(this.freelanceContractAddress);
-//     this.utilRefreshScheduleTable();
-//     this.uiSpnContractAction.classList.add('d-none');
-//     this.utilToggerAllButtonOnOff(1);
-//   });
-// }
+    await decentee.methods.projectState().call().then((result) =>{
+
+      console.log("326",result)
+
+      if (result == 0){
+        uiBtnAddSchedule.disabled = false;
+        uiBtnEndProject.disabled = true;
+      }
+      else if (result == 1){
+        // this.uiLblTotalEth = document.getElementById("lbl-total-eth");
+        // this.uiLblDisbursedEth = document.getElementById("lbl-disbursed-eth");
+        console.log("T:" + this.uiLblTotalEth.innerHTML);
+        console.log("D:"+ this.uiLblDisbursedEth.innerHTML);
+        if (uiLblTotalEth == uiLblDisbursedEth){
+          uiBtnAddSchedule.disabled = true;
+          uiBtnEndProject.disabled = false;
+        }
+        else{
+          uiBtnAddSchedule.disabled = true;
+          uiBtnEndProject.disabled = true;
+        }
+      }
+      else if (result == 2){
+        uiBtnAddSchedule.disabled = true;
+        uiBtnEndProject.disabled = true;
+      }
+    });
+  }
+}
+
+
+//==============================================================================================================================
+
+
+const btnEndProject = async () => {
+  var uiSpnContractAction  = document.getElementById("spn-contract-action");
+      uiSpnContractAction.classList.remove('d-none');
+  //utilToggerAllButtonOnOff(0);
+  decentee.methods.endProject().send({from: account})
+  .on('error', function(error, receipt) { 
+      uiSpnContractAction.classList.add('d-none');
+      //utilToggerAllButtonOnOff(1);
+  })
+  .then((result) => {
+    utilRefreshHeader(contractAddresss);
+    utilRefreshScheduleTable();
+    uiSpnContractAction.classList.add('d-none');
+    //utilToggerAllButtonOnOff(1);
+  });
+}
 
 //==============================================================================================================================
 
@@ -340,20 +379,21 @@ const retrieveFreelancer = (ContractAddress, who="freelancer") => {
 
 
 
-// const btnRefresh = async (who) => {
-//   console.log("---" + this.freelanceContractAddress);
-//   if (this.freelanceContractAddress == null)
-//     this.freelanceContractAddress = document.getElementById("txt-contract-address").value;
+const btnRefresh = async (who) => {
+  console.log("---" + contractAddresss);
+  if (contractAddresss == null)
+      getContractAddress()
+   // this.freelanceContractAddress = document.getElementById("txt-contract-address").value;
 
-//   await this.utilRefreshHeader(this.freelanceContractAddress);
+  await utilRefreshHeader(contractAddresss);
   
-//   if (who == "freelancer"){
-//     await this.utilRefreshScheduleTable();
-//   }
-//   else {
-//     await this.utilRefreshScheduleTableClient();
-//   }
-// }
+  if (who == "mentor"){
+    await utilRefreshScheduleTable();
+  }
+  else {
+    //await this.utilRefreshScheduleTableClient();
+  }
+}
 
 
 //==============================================================================================================================
@@ -424,19 +464,19 @@ const utilAddScheduleToTable = (shortcode, description, value, state, action, sc
 
   td = document.createElement("td");
   //let client fund this if (a) it's the client (b) schedule is not funded (c) project is accepted
-  if (action === "client" && state == 0 && freelancerContractStatus == 1){
+  if (action === "client" && state == 0 && decenteeContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnFundSchedule('+ value/1000000000000000000 + ',' + scheduleID + ')" class="btn btn-primary btn-sm">Fund</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "freelancer" && state == 1 && freelancerContractStatus == 1){
+  else if (action === "mentor" && state == 1 && decenteeContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnStartSchedule(' + scheduleID + ')" class="btn btn-success btn-sm">Start Work</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "client" && state == 2 && freelancerContractStatus == 1){
+  else if (action === "client" && state == 2 && decenteeContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnApproveSchedule(' + scheduleID + ')" class="btn btn-warning btn-sm">Approve</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
-  else if (action === "freelancer" && state == 3 && freelancerContractStatus == 1){
+  else if (action === "mentor" && state == 3 && decenteeContractStatus == 1){
     td.innerHTML = '<button type="button" onclick="App.btnReleaseFunds(' + scheduleID + ')" class="btn btn-info btn-sm">Release Funds</button>';
     td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-'+ scheduleID + '"></span>';
   }
@@ -548,7 +588,7 @@ const btnAddSchedule = async () =>{
         <div className="col-6">
           <ul className="list-group">
             <li className="list-group-item"><span className="fw-bold">Contract Address: {contractAddresss} </span><span id="lbl-contract-address"></span></li>
-            <li className="list-group-item"><span className="fw-bold">Instructors Address: {mentorContractAddress} </span><span id="lbl-freelancer-address"></span></li>
+            <li className="list-group-item"><span className="fw-bold">Instructors Address: {mentorAddress} </span><span id="lbl-freelancer-address"></span></li>
             <li className="list-group-item"><span className="fw-bold">Client's Wallet: </span><span id="lbl-client-address" /></li>
             <li className="list-group-item"><span className="fw-bold">Project State: {projectState}</span><span className="badge" id="lbl-project-status"></span></li>
           </ul>
@@ -574,8 +614,8 @@ const btnAddSchedule = async () =>{
       <br />
 
       <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#scheduleModal" id="btn-Add-Schedule">Add Schedule</button>
-      <button className="btn btn-primary btn-lg" type="button" id="btn-End-Project" >End Project</button>
-      <button className="btn btn-success btn-lg" type="button" id="btn-Refresh">Refresh</button>
+      <button className="btn btn-primary btn-lg" type="button" id="btn-End-Project" onClick={btnEndProject}>End Project</button>
+      <button className="btn btn-success btn-lg" type="button" id="btn-Refresh" onClick={btnRefresh}>Refresh</button>
       <div className="spinner-border spinner-border-sm d-none" role="status" id="spn-contract-action"></div>
     </div>
 
