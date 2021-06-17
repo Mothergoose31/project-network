@@ -6,40 +6,44 @@ import { Modal, Popover } from 'react-bootstrap';
 
 
 
-  //ui declarations
-  // uiSpnLoad:null,
-  // uiSpnAddSchedule: null,
-  // uiConContract:null,
-  // uiSpnContractAction: null,
-  // uiLblContractAddress:null,
-  // uiLblFreelancerAddress:null,
-  // uiTxtContractAddress:null,
-  // uiLblClientAddress: null,
-  // uiLblProjectState:null,
-  // scheduleModal: null,
-  // uiTxtShortCode: null,
-  // uiTxtScheduleDescription: null,
-  // uiTxtScheduleValue: null,
-  // uiTblScheduleTable: null,
-  // uiTblScheduleTableBody: null,
-  // uiBtnDeploy: null,
-  // uiBtnDeployPopover: null,
-  // uiLblTotalEth: null,
-  // uiLblDisbursedEth: null,
-  // uiBtnAcceptProject: null,
-  // uiBtnAddSchedule: null,
-  // uiBtnEndProject: null,
+  //UI DECLARATIONS
 
+  //✅ == Worked on /optimized
+  // ⭕ == is working but can be optimized 
+  //❌ == is commeted out , needs to worked on... probably
+  //==============================================================================================================================
+
+  // ✅uiSpnLoad:null,
+  //⭕ uiSpnAddSchedule: null,
+  // ⭕uiConContract:null,
+  // ⭕uiSpnContractAction: null,
+  // ✅uiLblContractAddress:null,
+  // ✅uiLblFreelancerAddress:null,
+  // ✅uiTxtContractAddress:null,
+  // ✅ uiLblClientAddress: null,
+  // ✅uiLblProjectState:null,
+  // ✅scheduleModal: null,
+  // ❌uiTxtShortCode: null,
+  // ❌uiTxtScheduleDescription: null,
+  // ❌uiTxtScheduleValue: null,
+  // ⭕uiTblScheduleTable: null,
+  // ⭕uiTblScheduleTableBody: null,
+  // ❌uiBtnDeploy: null,
+  // ❌uiBtnDeployPopover: null,
+  // ✅uiLblTotalEth: null,
+  // ✅uiLblDisbursedEth: null,
+  // ❌uiBtnAcceptProject: null,===========>  MISSING FROM THE CODE
+  // ❌uiBtnAddSchedule: null,===========>  MISSING FROM THE CODE
+  // ❌uiBtnEndProject: null,===========>  MISSING FROM THE CODE
+
+//==============================================================================================================================
   
-
   const Mentor = ({ account, decentee }) => {
-    
-  
     const [contractAddresss, setContractAddresss ] = useState("");
     const [mentorContractAddress, setMentorContractAddress ] = useState("")
     const [projectState, setProjectState] = useState(null)
     const [scheduleModal, setScheduleModal] = useState(null)
- //==============================================================================================================================
+
     const [shortCode, setShortCode] = useState("")
     const [modalDescription, setModalDescription] = useState("")
     const [ethValue, setEthValue] = useState("")
