@@ -6,40 +6,44 @@ import { Modal, Popover } from 'react-bootstrap';
 
 
 
-  //ui declarations
-  // uiSpnLoad:null,
-  // uiSpnAddSchedule: null,
-  // uiConContract:null,
-  // uiSpnContractAction: null,
-  // uiLblContractAddress:null,
-  // uiLblFreelancerAddress:null,
-  // uiTxtContractAddress:null,
-  // uiLblClientAddress: null,
-  // uiLblProjectState:null,
-  // scheduleModal: null,
-  // uiTxtShortCode: null,
-  // uiTxtScheduleDescription: null,
-  // uiTxtScheduleValue: null,
-  // uiTblScheduleTable: null,
-  // uiTblScheduleTableBody: null,
-  // uiBtnDeploy: null,
-  // uiBtnDeployPopover: null,
-  // uiLblTotalEth: null,
-  // uiLblDisbursedEth: null,
-  // uiBtnAcceptProject: null,
-  // uiBtnAddSchedule: null,
-  // uiBtnEndProject: null,
+  //UI DECLARATIONS
 
-  // test
+  //✅ == Worked on /optimized
+  // ⭕ == is working but can be optimized 
+  //❌ == is commeted out , needs to worked on... probably
+  //==============================================================================================================================
 
-  const Mentor = ({ account, decentee }) => {
-    
+  // ✅uiSpnLoad:null,
+  //⭕ uiSpnAddSchedule: null,
+  // ⭕uiConContract:null,
+  // ⭕uiSpnContractAction: null,
+  // ✅uiLblContractAddress:null,
+  // ✅uiLblFreelancerAddress:null,
+  // ✅uiTxtContractAddress:null,
+  // ✅ uiLblClientAddress: null,
+  // ✅uiLblProjectState:null,
+  // ✅scheduleModal: null,
+  // ❌uiTxtShortCode: null,
+  // ❌uiTxtScheduleDescription: null,
+  // ❌uiTxtScheduleValue: null,
+  // ⭕uiTblScheduleTable: null,
+  // ⭕uiTblScheduleTableBody: null,
+  // ❌uiBtnDeploy: null,
+  // ❌uiBtnDeployPopover: null,
+  // ✅uiLblTotalEth: null,
+  // ✅uiLblDisbursedEth: null,
+  // ❌uiBtnAcceptProject: null,===========>  MISSING FROM THE CODE
+  // ❌uiBtnAddSchedule: null,===========>  MISSING FROM THE CODE
+  // ❌uiBtnEndProject: null,===========>  MISSING FROM THE CODE
+
+//==============================================================================================================================
   
+  const Mentor = ({ account, decentee }) => {
     const [contractAddresss, setContractAddresss ] = useState("");
     const [mentorAddress, setMentorAddress ] = useState("")
     const [projectState, setProjectState] = useState(null)
     const [scheduleModal, setScheduleModal] = useState(null)
-    //========================================================================
+
     const [shortCode, setShortCode] = useState("")
     const [modalDescription, setModalDescription] = useState("")
     const [ethValue, setEthValue] = useState("")
@@ -47,6 +51,7 @@ import { Modal, Popover } from 'react-bootstrap';
     const [uiLblTotalEth, setUiLblTotalEth ] = useState(null)
     const [uiLblDisbursedEth, setUiLblDisbursedEth ] = useState(null)
 
+    const [uiLblClientAddress, set] = useState(null)
 
     var decenteeContractStatus = null;
 
@@ -63,8 +68,6 @@ const getContractAddress = (e) => {
   setContractAddresss(e.target.value)
 
 }
-
-
 
 //==============================================================================================================================
     
@@ -90,10 +93,7 @@ const onValue = (e) => {
 
 }
 
-
-
 //==============================================================================================================================
-
 
 const btnGo = () => {
    // this.uiBtnDeployPopover.hide();
@@ -107,13 +107,11 @@ const btnGo = () => {
         retrieveFreelancer(contractAddresss);  
       }
     }
-    
 
 
 //==============================================================================================================================
-
-
- const utilProjectStatus = function(statusCode) {
+  
+  const utilProjectStatus = function(statusCode) {
     //initiated, accepted, closed
     //console.log(statusCode);
     var uiLblProjectState = document.getElementById("lbl-project-status");
@@ -134,12 +132,8 @@ const btnGo = () => {
   }
 
 //==============================================================================================================================
-
-
-
-
   
-const utilGetEthValue = async () => {
+  const utilGetEthValue = async () => {
     let totalRow;
     let totalDisbursed=0;
     let totalValue = 0;
@@ -192,15 +186,21 @@ const utilGetEthValue = async () => {
     utilToggerActionBtns("mentor");
   }
   
-
 //==============================================================================================================================
+//hooks for diplaying  contract adress, instructor adress, client wallet, and the state of the project. 
+// Clients Wallet remains Blank until you get a client 
+
 
 const utilRefreshHeader = async (ContractAddress) => {
   const web3 = window.web3;
   var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, ContractAddress);
   var uiConContract = document.getElementById("con-contract");
  
+  uiConContract.classList.remove('d-none');
+  setContractAddresss(ContractAddress);
+  console.log("207",freelancerContract.methods)
   
+
  // this.uiLblClientAddress = document.getElementById("lbl-client-address");
 
     uiConContract.classList.remove('d-none');
@@ -213,25 +213,29 @@ const utilRefreshHeader = async (ContractAddress) => {
       setMentorAddress(result);
     });
 
-    // await freelancerContract.methods.clientAddress().call().then((result) =>{
-    //   this.uiLblClientAddress.textContent = result;
-    // });
+
+  await freelancerContract.methods.clientAddress().call().then((result) =>{
+    setuiLblClientAddress(result);
+  });
+
 
     await freelancerContract.methods.projectState().call().then((result) =>{
         decenteeContractStatus = result;
         utilProjectStatus(parseInt(result));
     });
 
+
+
 }
-
-
 
 //==============================================================================================================================
 
 
 
 
+
 const retrieveFreelancer = (ContractAddress, who="mentor") => {
+
     try {
           utilRefreshHeader(ContractAddress);
         if (who === "mentor"){
@@ -247,9 +251,8 @@ const retrieveFreelancer = (ContractAddress, who="mentor") => {
     }
   }
 
-
-
 //==============================================================================================================================
+  
   const deployFreelancer = function() {
     const web3 = window.web3;
 
@@ -307,14 +310,7 @@ const retrieveFreelancer = (ContractAddress, who="mentor") => {
     
   }
 
-
-
-
-
-
 //==============================================================================================================================
-
-
 
 const utilToggerActionBtns = async (who) => {
   if (who == "mentor"){
@@ -379,6 +375,7 @@ const btnEndProject = async () => {
 
 
 
+
 const btnRefresh = async (who) => {
   console.log("---" + contractAddresss);
   if (contractAddresss == null)
@@ -394,7 +391,6 @@ const btnRefresh = async (who) => {
     //await this.utilRefreshScheduleTableClient();
   }
 }
-
 
 //==============================================================================================================================
 
@@ -417,6 +413,7 @@ const btnRefresh = async (who) => {
 //   }
 // }
 
+//==============================================================================================================================
 
 const utilScheduleState = (stateCode) => {
   //planned, funded, started, approved, released
@@ -433,6 +430,9 @@ const utilScheduleState = (stateCode) => {
       return "<span class='badge bg-dark'>Released</span>";
   }
 }
+
+//==============================================================================================================================
+// @dev TODO  optimize this  
 
 
 const utilAddScheduleToTable = (shortcode, description, value, state, action, scheduleID = 0) => {
@@ -487,7 +487,7 @@ const utilAddScheduleToTable = (shortcode, description, value, state, action, sc
 }
 
 
-
+//==============================================================================================================================
 
 
 const btnAddSchedule = async () =>{
@@ -536,18 +536,9 @@ const btnAddSchedule = async () =>{
   }
 }
 
-
-
-
 //==============================================================================================================================
 
-
-
-
-
-
-
-    return (
+  return (
         <>
         <br />
         
@@ -588,6 +579,7 @@ const btnAddSchedule = async () =>{
         <div className="col-6">
           <ul className="list-group">
             <li className="list-group-item"><span className="fw-bold">Contract Address: {contractAddresss} </span><span id="lbl-contract-address"></span></li>
+
             <li className="list-group-item"><span className="fw-bold">Instructors Address: {mentorAddress} </span><span id="lbl-freelancer-address"></span></li>
             <li className="list-group-item"><span className="fw-bold">Client's Wallet: </span><span id="lbl-client-address" /></li>
             <li className="list-group-item"><span className="fw-bold">Project State: {projectState}</span><span className="badge" id="lbl-project-status"></span></li>
@@ -597,7 +589,7 @@ const btnAddSchedule = async () =>{
           <div className="card">
               <div className="card-header fw-bold text-center">Total Value (ETH)</div>
               <div className="card-body">
-              <p className="card-text text-center"><span className="fs-1" id="lbl-total-eth">  {uiLblTotalEth}    </span></p>
+              <p className="card-text text-center"><span className="fs-1" id="lbl-total-eth">  {uiLblTotalEth} </span></p>
             </div>
           </div>
         </div>

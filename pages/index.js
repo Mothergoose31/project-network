@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
-import Navbar from './components/Navbar'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 import SplashPage from './components/SplashPage'
@@ -35,6 +34,11 @@ const Home = ({ account, decentee, loading }) => {
                 <p>Learn about Next.js in an interactive course with quizzes!</p>
               </a>
           </div>
+
+
+
+
+
           
         </main>
         </>
