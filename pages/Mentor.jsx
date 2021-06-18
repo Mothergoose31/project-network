@@ -4,6 +4,9 @@ import Web3 from 'web3';
 import DecenteeArtifact from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
 
+// function used in both mentee and mentor pages 
+import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
+
 
 
 //UI DECLARATIONS
@@ -228,11 +231,7 @@ const Mentor = ({ account, decentee }) => {
 
   //==============================================================================================================================
 
-
-
-
-
-  const retrieveFreelancer = (ContractAddress, who = "mentor") => {
+    const retrieveFreelancer = (ContractAddress, who = "mentor") => {
 
     try {
       utilRefreshHeader(ContractAddress);
@@ -309,7 +308,8 @@ const Mentor = ({ account, decentee }) => {
   }
 
   //==============================================================================================================================
-
+  // not sure if this function should be here
+  // might have to be moved to the  Global-functions page
   const utilToggerActionBtns = async (who) => {
     if (who == "mentor") {
       var uiBtnAddSchedule = document.getElementById("btn-Add-Schedule");
@@ -342,13 +342,25 @@ const Mentor = ({ account, decentee }) => {
           uiBtnEndProject.disabled = true;
         }
       });
+      uiBtnAcceptProject = document.getElementById("btn-Accept-Project");
+      console.log("btn-----"+uiBtnAcceptProject);
+      await freelancerContract.methods.projectState().call().then((result) =>{
+        if (result == 0){
+          uiBtnAcceptProject.disabled = false;
+        }
+        else if (result == 1){
+          uiBtnAcceptProject.disabled = true;  
+        }
+        else if (result == 2){
+          uiBtnAcceptProject.disabled = true;  
+        }
+      });
+
     }
   }
-
-
+  
   //==============================================================================================================================
-
-
+  
   const btnEndProject = async () => {
     var uiSpnContractAction = document.getElementById("spn-contract-action");
     uiSpnContractAction.classList.remove('d-none');
@@ -384,27 +396,6 @@ const Mentor = ({ account, decentee }) => {
       //await this.utilRefreshScheduleTableClient();
     }
   }
-
-  //==============================================================================================================================
-
-  // const utilToggerAllButtonOnOff = function(state){
-  //   if (state == 0){
-  //     let buttons = document.getElementsByTagName("button");
-  //     let i;
-  //     for (i = 0; i < buttons.length; i++) {
-  //       buttons[i].classList.add("disabled");
-  //       console.log(buttons[i]);
-  //     }
-  //   }
-  //   else if (state == 1){
-  //     let buttons = document.getElementsByTagName("button");
-  //     let i;
-  //     for (i = 0; i < buttons.length; i++) {
-  //       buttons[i].classList.remove("disabled");
-  //       console.log(buttons[i]);
-  //     }
-  //   }
-  // }
 
   //==============================================================================================================================
 
@@ -481,7 +472,6 @@ const Mentor = ({ account, decentee }) => {
 
 
   //==============================================================================================================================
-
 
   const btnAddSchedule = async () => {
     const web3 = window.web3;
