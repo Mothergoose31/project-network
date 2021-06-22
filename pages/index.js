@@ -29,10 +29,12 @@ const Home = ({ account, decentee, loading }) => {
                   <p>Find in-depth information about Next.js features and API.</p>
                 </a>
               </Link>
-              <a href="https://nextjs.org/learn" className={styles.card}>
+              <Link href="/Mentee">
+              <a  className={styles.card}>
                 <h2>Mentee &rarr;</h2>
                 <p>Learn about Next.js in an interactive course with quizzes!</p>
               </a>
+              </Link>
           </div>
 
 

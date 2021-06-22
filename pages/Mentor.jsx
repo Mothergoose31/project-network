@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Web3 from 'web3';
 import DecenteeArtifact from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
+ import { test } from './components/Globalfunction'
 
 // function used in both mentee and mentor pages 
 import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
@@ -25,9 +26,9 @@ import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
 // ✅ uiLblClientAddress: null,
 // ✅uiLblProjectState:null,
 // ✅scheduleModal: null,
-// ❌uiTxtShortCode: null,
-// ❌uiTxtScheduleDescription: null,
-// ❌uiTxtScheduleValue: null,
+// ✅uiTxtShortCode: null,
+// ✅uiTxtScheduleDescription: null,
+// ✅uiTxtScheduleValue: null,
 // ⭕uiTblScheduleTable: null,
 // ⭕uiTblScheduleTableBody: null,
 // ❌uiBtnDeploy: null,
@@ -53,6 +54,7 @@ const Mentor = ({ account, decentee }) => {
   const [uiLblDisbursedEth, setUiLblDisbursedEth] = useState(null)
 
   const [uiLblClientAddress, setUiLblClientAddress] = useState(null)
+
 
   var decenteeContractStatus = null;
 
@@ -102,6 +104,7 @@ const Mentor = ({ account, decentee }) => {
     //  this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
     if (contractAddresss == "") {
       deployFreelancer();
+      
 
     }
     else {
@@ -302,7 +305,7 @@ const Mentor = ({ account, decentee }) => {
 
         //update the ETH Value boxes
         utilGetEthValue();
-        // utilToggerActionBtns("mentor");
+        utilToggerActionBtns("mentor");
       })
 
   }
@@ -364,17 +367,17 @@ const Mentor = ({ account, decentee }) => {
   const btnEndProject = async () => {
     var uiSpnContractAction = document.getElementById("spn-contract-action");
     uiSpnContractAction.classList.remove('d-none');
-    //utilToggerAllButtonOnOff(0);
+    utilToggerAllButtonOnOff(0);
     decentee.methods.endProject().send({ from: account })
       .on('error', function (error, receipt) {
         uiSpnContractAction.classList.add('d-none');
-        //utilToggerAllButtonOnOff(1);
+        utilToggerAllButtonOnOff(1);
       })
       .then((result) => {
         utilRefreshHeader(contractAddresss);
         utilRefreshScheduleTable();
         uiSpnContractAction.classList.add('d-none');
-        //utilToggerAllButtonOnOff(1);
+        utilToggerAllButtonOnOff(1);
       });
   }
 
@@ -486,7 +489,7 @@ const Mentor = ({ account, decentee }) => {
 
       var uiSpnAddSchedule = document.getElementById("spn-add-schedule");
       uiSpnAddSchedule.classList.remove('d-none');
-      // this.utilToggerAllButtonOnOff(0);
+        utilToggerAllButtonOnOff(0);
       //console.log(freelancerContract.methods)
 
       freelancerContract.methods.addSchedule(shortCode, modalDescription, web3.utils.toWei(ethValue, 'ether')).send({ from: account })
@@ -498,7 +501,7 @@ const Mentor = ({ account, decentee }) => {
 
           // var scheduleModal = Modal.getInstance(document.getElementById('scheduleModal'));
           //     scheduleModal.hide();
-          // utilToggerAllButtonOnOff(1);
+          utilToggerAllButtonOnOff(1);
         })
         .then((result) => {
           console.log("try to do this");
@@ -510,7 +513,7 @@ const Mentor = ({ account, decentee }) => {
           utilAddScheduleToTable(shortCode, modalDescription, web3.utils.toWei(ethValue, 'ether'), 0);
           utilGetEthValue();
           //  scheduleModal.hide();
-          // this.utilToggerAllButtonOnOff(1);
+          utilToggerAllButtonOnOff(1);
         });
 
     }
