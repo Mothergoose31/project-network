@@ -4,7 +4,8 @@ import Head from "next/head";
 import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
 import Navbar from './components/Navbar'
-import  styles from ".././styles/Navbar.module.css"
+import styles from ".././styles/Navbar.module.css"
+import { TodosProvider } from './ContextApi/GlobalState'
 
 // @dev 
 //about the _app.js page
@@ -17,24 +18,24 @@ import  styles from ".././styles/Navbar.module.css"
 function MyApp({ Component, pageProps }) {
 
 
-  const [account, setAccount ] = useState('');
-  const [decentee, setDecentee ] = useState(null);
-  const [loading, setLoading ] = useState(true);
+  const [account, setAccount] = useState('');
+  const [decentee, setDecentee] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 
 
 
   useEffect(() => {
-      
+
     loadWeb3();
-    loadBlockchainData(); 
-  
-    },[] )
-  
-//==============================================================================================================================
+    loadBlockchainData();
+
+  }, [])
+
+  //==============================================================================================================================
   const loadWeb3 = async () => {
 
-    if(window.ethereum) {
+    if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
       await window.ethereum.enable()
     }
@@ -45,10 +46,10 @@ function MyApp({ Component, pageProps }) {
     }
   }
 
-//==============================================================================================================================
+  //==============================================================================================================================
 
   const loadBlockchainData = async () => {
-    
+
     const web3 = window.web3;
 
     // Load account
@@ -68,26 +69,27 @@ function MyApp({ Component, pageProps }) {
 
 
     //If we get back network data base from network id
-    if(networkData) {
+    if (networkData) {
 
       const decentee = new web3.eth.Contract(Decentee.abi, networkData.address)
       setDecentee(decentee)
 
-   
-     
+
+
       setLoading(false)
-      
+
     } else {
-    window.alert('Decentragam contract not deployed to dectectd network')
+      window.alert('Decentragam contract not deployed to dectectd network')
     }
 
   }
 
 
   return (
-    <>
-     <Navbar account={account} className={styles.navbar} />
-     <br/>
+    <TodosProvider>
+
+      <Navbar account={account} className={styles.navbar} />
+      <br />
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -101,12 +103,13 @@ function MyApp({ Component, pageProps }) {
           integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
           crossOrigin="anonymous"></script>
       </Head>
-      <Component {...pageProps} 
-      decentee={decentee} 
-      account={account}
-      loading={loading}
+      <Component {...pageProps}
+        decentee={decentee}
+        account={account}
+        loading={loading}
       />
-    </>
+
+    </TodosProvider>
   )
 
 
