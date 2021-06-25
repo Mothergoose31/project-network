@@ -80,11 +80,24 @@ function Mentee() {
                         </div>
                     </div>
                 </div>
+                <br/>
+                <button className="btn btn-primary btn-lg" id="btn-Accept-Project" onclick="App.btnAcceptProject()">Accept Project</button>
+                <button className="btn btn-success btn-lg " id="btn-Refresh" onclick="App.btnRefresh('client')" >Refresh</button>
+                <div class="spinner-border spinner-border-sm d-none" role="status" id="spn-contract-action"></div>
             </div>
-
-            <br/>
-            
-
+            <table class="table table-striped table-hover d-none" id="tbl-schedule-table">
+                <thead>
+                <tr>
+                    <th scope="col" data-field="short-code">Short Code</th>
+                    <th scope="col" data-field="description">Description</th>
+                    <th scope="col" class="text-end" data-field="value">Value (in ETH)</th>
+                    <th scope="col" data-field="state">State</th>
+                    <th scope="col" data-field="state">Action</th>
+                </tr>
+                </thead>
+                <tbody id="schedule-table-body">
+                </tbody>
+            </table>
         </body>
     )
 }
