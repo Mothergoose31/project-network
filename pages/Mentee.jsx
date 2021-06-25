@@ -1,8 +1,11 @@
 import React from 'react'
 
-import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
+
+import { utilToggerAllButtonOnOff } from "./components/Global-Functions.js"
 
 function Mentee() {
+
+
 
     // btnAcceptProject async function(){
     //     uiSpnContractAction = document.getElementById("spn-contract-action");
@@ -24,10 +27,8 @@ function Mentee() {
         // Note from Joseph
         // Mentee and Mentor page share the div withe the id container-fluid py-2 d-none
         // later on this can be simplified, for now Im just writing out the page.
-        
-        <body>
-
-    
+      
+       <body>
             <div className="p-1 mb-1 bg-dark bg-gradient text-white rounded-3">
                 <div className="container-fluid py-3">
                     <h1 class="display-7 fw-bold">Client Smart Contract</h1>
@@ -39,16 +40,16 @@ function Mentee() {
                             </div>
                         </div>
                         <div className="col-4">
-                        <button class="btn btn-primary btn-lg" onclick="App.btnGoClient()" 
-                            type="button" id="btn-Deploy"
-                            data-bs-toggle="popover" title="Error" 
-                            data-bs-content="Smart Contract Not Found"
-                            data-bs-trigger="manual">
+                            <button class="btn btn-primary btn-lg" onclick="App.btnGoClient()"
+                                type="button" id="btn-Deploy"
+                                data-bs-toggle="popover" title="Error"
+                                data-bs-content="Smart Contract Not Found"
+                                data-bs-trigger="manual">
                                 Go
-                        </button>
-                        <div className="spinner-border spinner-border-sm d-none" role="status" id="spn-load">
-                            <span className="sr-only"></span>
-                        </div>
+                            </button>
+                            <div className="spinner-border spinner-border-sm d-none" role="status" id="spn-load">
+                                <span className="sr-only"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,7 +66,7 @@ function Mentee() {
                     </div>
                     <div className="col-3">
                         <div className="card">
-                            <div className="card-header fw-bold text-center">Total Value (ETH)</div> 
+                            <div className="card-header fw-bold text-center">Total Value (ETH)</div>
                             <div className="card-body">
                                 <p className="card-text text-center"><span className="fs-1" id="lbl-total-eth"></span></p>
                             </div>
@@ -80,25 +81,26 @@ function Mentee() {
                         </div>
                     </div>
                 </div>
-                <br/>
+                <br />
                 <button className="btn btn-primary btn-lg" id="btn-Accept-Project" onclick="App.btnAcceptProject()">Accept Project</button>
                 <button className="btn btn-success btn-lg " id="btn-Refresh" onclick="App.btnRefresh('client')" >Refresh</button>
                 <div class="spinner-border spinner-border-sm d-none" role="status" id="spn-contract-action"></div>
             </div>
             <table class="table table-striped table-hover d-none" id="tbl-schedule-table">
                 <thead>
-                <tr>
-                    <th scope="col" data-field="short-code">Short Code</th>
-                    <th scope="col" data-field="description">Description</th>
-                    <th scope="col" class="text-end" data-field="value">Value (in ETH)</th>
-                    <th scope="col" data-field="state">State</th>
-                    <th scope="col" data-field="state">Action</th>
-                </tr>
+                    <tr>
+                        <th scope="col" data-field="short-code">Short Code</th>
+                        <th scope="col" data-field="description">Description</th>
+                        <th scope="col" class="text-end" data-field="value">Value (in ETH)</th>
+                        <th scope="col" data-field="state">State</th>
+                        <th scope="col" data-field="state">Action</th>
+                    </tr>
                 </thead>
                 <tbody id="schedule-table-body">
                 </tbody>
             </table>
         </body>
+
     )
 }
 
