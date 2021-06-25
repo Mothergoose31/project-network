@@ -27,8 +27,8 @@ function Mentee() {
         // Note from Joseph
         // Mentee and Mentor page share the div withe the id container-fluid py-2 d-none
         // later on this can be simplified, for now Im just writing out the page.
-
-        <body>
+      
+       <body>
             <div className="p-1 mb-1 bg-dark bg-gradient text-white rounded-3">
                 <div className="container-fluid py-3">
                     <h1 class="display-7 fw-bold">Client Smart Contract</h1>
@@ -100,6 +100,7 @@ function Mentee() {
                 </tbody>
             </table>
         </body>
+
     )
 }
 
