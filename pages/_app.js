@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import Decentee from './abis/Decentee.json'
 import Navbar from './components/Navbar'
 import styles from ".././styles/Navbar.module.css"
-import { TodosProvider } from './ContextApi/GlobalState'
+import { GlobalProvider } from './ContextApi/GlobalState'
 
 // @dev 
 //about the _app.js page
@@ -86,7 +86,8 @@ function MyApp({ Component, pageProps }) {
 
 
   return (
-    <TodosProvider>
+    // Global Provider is a wrapper that gives global state to every page and component inside the next js app from ContextApi.jsx
+    <GlobalProvider>
 
       <Navbar account={account} className={styles.navbar} />
       <br />
@@ -109,7 +110,7 @@ function MyApp({ Component, pageProps }) {
         loading={loading}
       />
 
-    </TodosProvider>
+    </GlobalProvider>
   )
 
 

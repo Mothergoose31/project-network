@@ -1,18 +1,18 @@
 import { createContext, useState } from 'react'
 
-const TodosContext = createContext()
+const GlobalContext = createContext()
 
 
-const TodosProvider = ({ children }) => {
+const GlobalProvider = ({ children }) => {
 
     const [contractAddresss, setContractAddresss] = useState("");
 
 
     return (
-       <TodosContext.Provider value={{contractAddresss, setContractAddresss}}>
+       <GlobalContext.Provider value={{contractAddresss, setContractAddresss}}>
            {children}
-       </TodosContext.Provider>
+       </GlobalContext.Provider>
     )
 }
 
-export {TodosProvider, TodosContext}
+export {GlobalProvider, GlobalContext}
