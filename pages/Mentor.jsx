@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Web3 from 'web3';
 import DecenteeArtifact from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
-import { TodosContext } from './ContextApi/GlobalState'
+import { GlobalContext } from './ContextApi/GlobalState'
 // import { test } from './components/Globalfunction'
 
 // function used in both mentee and mentor pages 
@@ -43,7 +43,7 @@ import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
 
 const Mentor = ({ account, decentee }) => {
 
-  const { contractAddresss, setContractAddresss } = useContext(TodosContext)
+  const { contractAddresss, setContractAddresss } = useContext(GlobalContext)
  // const [contractAddresss, setContractAddresss] = useState("");
 
   const [newDecenteeContract, setnewDecenteeContract] = useState('new');
@@ -140,12 +140,13 @@ const Mentor = ({ account, decentee }) => {
 
   //==============================================================================================================================
 
-  const utilGetEthValue = async () => {
+  const utilGetEthValue = async (contractAddress) => {
+    var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, contractAddress);
     let totalRow;
     let totalDisbursed = 0;
     let totalValue = 0;
 
-    await decentee.methods.totalSchedules().call().then((result) => {
+    await freelancerContract.methods.totalSchedules().call().then((result) => {
 
       console.log("eth value", result)
 
@@ -153,7 +154,7 @@ const Mentor = ({ account, decentee }) => {
     });
 
     for (let i = 0; i <= totalRow - 1; i++) {
-      await decentee.methods.scheduleRegister(i).call().then((result) => {
+      await freelancerContract.methods.scheduleRegister(i).call().then((result) => {
         totalValue += result["value"] / 1000000000000000000;
         if (result["scheduleState"] == 4) {
           totalDisbursed += result["value"] / 1000000000000000000;
@@ -167,8 +168,9 @@ const Mentor = ({ account, decentee }) => {
 
   //==============================================================================================================================
 
-  const utilRefreshScheduleTable = async () => {
+  const utilRefreshScheduleTable = async (contractAddress) => {
     console.log("freelancer table refresh");
+    var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, contractAddress);
     var uiTblScheduleTable = document.getElementById("tbl-schedule-table");
     uiTblScheduleTable.classList.remove('d-none');
 
@@ -178,18 +180,19 @@ const Mentor = ({ account, decentee }) => {
 
     let totalRow;
 
-    await decentee.methods.totalSchedules().call().then((result) => {
+    await freelancerContract.methods.totalSchedules().call().then((result) => {
+      console.log("183 ", result)
       totalRow = result;
     });
 
     for (let i = 0; i <= totalRow - 1; i++) {
-      await decentee.methods.scheduleRegister(i).call().then((result) => {
+      await freelancerContract.methods.scheduleRegister(i).call().then((result) => {
         utilAddScheduleToTable(result["shortCode"], result["description"], result["value"], result["scheduleState"], "mentor", i);
       });
     }
 
     //update the ETH Value boxes
-    await utilGetEthValue();
+    await utilGetEthValue(contractAddresss);
     utilToggerActionBtns("mentor");
   }
 
@@ -198,13 +201,13 @@ const Mentor = ({ account, decentee }) => {
   // Clients Wallet remains Blank until you get a client 
 
 
-  const utilRefreshHeader = async (ContractAddress) => {
+  const utilRefreshHeader = async (contractAddress) => {
     const web3 = window.web3;
-    var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, ContractAddress);
+    var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, contractAddress);
     var uiConContract = document.getElementById("con-contract");
 
     uiConContract.classList.remove('d-none');
-    setContractAddresss(ContractAddress);
+    setContractAddresss(contractAddress);
     console.log("207", freelancerContract.methods)
 
 
@@ -212,11 +215,12 @@ const Mentor = ({ account, decentee }) => {
 
     uiConContract.classList.remove('d-none');
 
-    setContractAddresss(ContractAddress);
+    setContractAddresss(contractAddress);
 
     //console.log("207",freelancerContract.methods)
 
     await freelancerContract.methods.decenteeAddress().call().then((result) => {
+      console.log(result)
       setMentorAddress(result);
     });
 
@@ -237,12 +241,12 @@ const Mentor = ({ account, decentee }) => {
 
   //==============================================================================================================================
 
-    const retrieveFreelancer = (ContractAddress, who = "mentor") => {
+    const retrieveFreelancer = (contractAddress, who = "mentor") => {
 
     try {
-      utilRefreshHeader(ContractAddress);
+      utilRefreshHeader(contractAddress);
       if (who === "mentor") {
-        utilRefreshScheduleTable();
+        utilRefreshScheduleTable(contractAddress);
       }
       else {
         //this.utilRefreshScheduleTableClient();
@@ -308,7 +312,7 @@ const Mentor = ({ account, decentee }) => {
         });
 
         //update the ETH Value boxes
-        utilGetEthValue();
+        utilGetEthValue(decenteeContractAddress);
         // utilToggerActionBtns("mentor");
       })
 
@@ -349,17 +353,17 @@ const Mentor = ({ account, decentee }) => {
           uiBtnEndProject.disabled = true;
         }
       });
-      var uiBtnAcceptProject = document.getElementById("btn-Accept-Project");
-      console.log("btn-----"+uiBtnAcceptProject);
-      await newDecenteeContract.methods.projectState().call().then((result) =>{
+    //  var uiBtnAcceptProject = document.getElementById("btn-Accept-Project");
+    //  console.log("btn-----"+uiBtnAcceptProject);
+      await decentee.methods.projectState().call().then((result) =>{
         if (result == 0){
-          uiBtnAcceptProject.disabled = false;
+         // uiBtnAcceptProject.disabled = false;
         }
         else if (result == 1){
-          uiBtnAcceptProject.disabled = true;  
+          //uiBtnAcceptProject.disabled = true;  
         }
         else if (result == 2){
-          uiBtnAcceptProject.disabled = true;  
+          //uiBtnAcceptProject.disabled = true;  
         }
       });
 
@@ -482,6 +486,8 @@ const Mentor = ({ account, decentee }) => {
 
   const btnAddSchedule = async () => {
     const web3 = window.web3;
+   
+    var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, contractAddresss);
     if (document.getElementById("Schedule-Form").checkValidity()) {
       // var uiTxtShortCode = document.getElementById("txt-short-code").value;
 
@@ -489,7 +495,7 @@ const Mentor = ({ account, decentee }) => {
 
       // var uiTxtScheduleValue = document.getElementById("txt-schedule-value")
 
-      var freelancerContract = decentee;
+      //var freelancerContract = decentee;
 
       var uiSpnAddSchedule = document.getElementById("spn-add-schedule");
       uiSpnAddSchedule.classList.remove('d-none');
@@ -515,7 +521,7 @@ const Mentor = ({ account, decentee }) => {
           // var scheduleModal = Modal.getInstance(document.getElementById('scheduleModal'));
 
           utilAddScheduleToTable(shortCode, modalDescription, web3.utils.toWei(ethValue, 'ether'), 0);
-          utilGetEthValue();
+          utilGetEthValue(contractAddresss);
           //  scheduleModal.hide();
           // this.utilToggerAllButtonOnOff(1);
         });
