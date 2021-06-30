@@ -249,7 +249,7 @@ const Mentor = ({ account, decentee }) => {
         utilRefreshScheduleTable(contractAddress);
       }
       else {
-        //this.utilRefreshScheduleTableClient();
+        utilRefreshScheduleTableClient();
       }
       //this.uiBtnDeployPopover.hide();
     } catch (error) {
