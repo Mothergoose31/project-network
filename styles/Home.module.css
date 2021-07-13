@@ -6,7 +6,7 @@
   -ms-flex-align: center;
   align-items: center;
   padding: 20px 35px;
-  background: rgba(255,255,255,.81);
+  background: rgba(0, 0, 0, 0.81);
   box-shadow: 0 48px 48px -16px rgb(0 0 0 / 4%);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);

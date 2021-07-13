@@ -4,7 +4,7 @@ import Web3 from 'web3';
 import DecenteeArtifact from './abis/Decentee.json'
 import { Modal, Popover } from 'react-bootstrap';
 import { GlobalContext } from './ContextApi/GlobalState'
-// import { test } from './components/Globalfunction'
+import { retrieveFreelancer } from './components/Globalfunction'
 
 // function used in both mentee and mentor pages 
 import {utilToggerAllButtonOnOff} from "./components/Global-Functions.js"
@@ -63,6 +63,8 @@ const Mentor = ({ account, decentee }) => {
   var decenteeContractStatus = null;
 
 
+ 
+
   // const [popoverOpen, setPopoverOpen] = useState(false);
 
   //console.log("contract", contractAddresss)
@@ -72,7 +74,7 @@ const Mentor = ({ account, decentee }) => {
   //==============================================================================================================================
   const getContractAddress = (e) => {
 
-    setContractAddresss(e.target.value)
+    setContractAddresss(e.target.value.trim())
 
   }
 
@@ -106,7 +108,7 @@ const Mentor = ({ account, decentee }) => {
     // this.uiBtnDeployPopover.hide();
 
     //  this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
-    if (contractAddresss == "") {
+    if (contractAddresss === "") {
       deployFreelancer();
 
     }
@@ -241,7 +243,7 @@ const Mentor = ({ account, decentee }) => {
 
   //==============================================================================================================================
 
-    const retrieveFreelancer = (contractAddress, who = "mentor") => {
+     const retrieveFreelancer = (contractAddress, who = "mentor") => {
 
     try {
       utilRefreshHeader(contractAddress);
@@ -292,11 +294,11 @@ const Mentor = ({ account, decentee }) => {
         uiConContract.classList.remove('d-none');
 
 
-        var decenteeContractAddress = receipt.contractAddress;
+       // var decenteeContractAddress = receipt.contractAddress;
 
-        uiLblContractAddress = receipt.contractAddress;
+        //uiLblContractAddress = receipt.contractAddress;
 
-        var newDecenteeContract = new web3.eth.Contract(DecenteeArtifact.abi, decenteeContractAddress);
+        var newDecenteeContract = new web3.eth.Contract(DecenteeArtifact.abi, receipt.contractAddress);
         setnewDecenteeContract(new web3.eth.Contract(DecenteeArtifact.abi, decenteeContractAddress))
 
         //console.log( newDecenteeContract)
@@ -313,7 +315,7 @@ const Mentor = ({ account, decentee }) => {
 
         //update the ETH Value boxes
         utilGetEthValue(decenteeContractAddress);
-        // utilToggerActionBtns("mentor");
+        utilToggerActionBtns("mentor");
       })
 
   }
