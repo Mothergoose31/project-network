@@ -1,11 +1,241 @@
-import React from 'react'
-
+import React, { useState, useEffect, useContext } from 'react';
+import { GlobalContext } from './ContextApi/GlobalState'
+import DecenteeArtifact from './abis/Decentee.json'
 
 import { utilToggerAllButtonOnOff } from "./components/Global-Functions.js"
 
 function Mentee() {
 
+    
+    const [contractAddress, setContractAddress] = useState("");
 
+
+
+
+    var decenteeContractStatus = null
+
+
+
+
+
+//=============================================================================================================================================================================================
+
+    const getContractAddress = (e) => {
+
+        setContractAddress(e.target.value.trim())
+    
+      }
+
+
+
+
+//=============================================================================================================================================================================================
+
+      const btnGoClient = () => {
+       
+        //this.uiBtnDeployPopover.hide();
+        
+        if (contractAddress === ""){
+          //this.uiBtnDeployPopover.show();
+        }
+        else{
+             var freelanceContractAddress = contractAddress;
+          var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, freelanceContractAddress);
+          retrieveFreelancer(contractAddress, "client");
+        }
+      }
+
+
+
+
+    //   btnGo: function(){
+    //     this.uiBtnDeployPopover.hide();
+    
+    //     this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
+    //     if (this.uiTxtContractAddress === ""){
+    //       this.deployFreelancer();
+    //     }
+    //     else {
+    //         this.retrieveFreelancer(this.uiTxtContractAddress);  
+    //     }
+    //   },
+
+
+
+//=============================================================================================================================================================================================
+      
+     const retrieveFreelancer = (contractAddress, who = "client") => {
+
+        try {
+          
+          utilRefreshScheduleTableClient();
+       
+          //this.uiBtnDeployPopover.hide();
+        } catch (error) {
+          console.log(error)
+          //this.uiBtnDeployPopover.show();
+        }
+      }
+
+//=============================================================================================================================================================================================
+
+      const utilRefreshScheduleTableClient = async  () => {
+
+        var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, contractAddress);
+
+        console.log("Client table refresh");
+        //this.utilToggerActionBtns("client");
+        var uiTblScheduleTable = document.getElementById("tbl-schedule-table"); 
+            uiTblScheduleTable.classList.remove('d-none');  
+    
+        while (uiTblScheduleTable.rows[1]){
+            uiTblScheduleTable.deleteRow(1);
+        }
+    
+        let totalRow;
+    
+        await freelancerContract.methods.totalSchedules().call().then((result) => {
+          totalRow = result;
+        });
+    
+        for (let i=0; i<= totalRow-1; i++){
+          await freelancerContract.methods.scheduleRegister(i).call().then((result)=>{
+                utilAddScheduleToTable(result["shortCode"], result["description"], result["value"], result["scheduleState"], "client", i);
+          });
+        }
+    
+        //await this.utilGetEthValue();
+        //this.utilToggerActionBtns("client");
+      }
+
+
+//=============================================================================================================================================================================================
+
+
+      
+  const utilScheduleState = (stateCode) => {
+    //planned, funded, started, approved, released
+    switch (stateCode) {
+      case 0:
+        return "<span class='badge bg-primary'>Planned</span>";
+      case 1:
+        return "<span class='badge bg-success'>Funded</span>";
+      case 2:
+        return "<span class='badge bg-warning'>Started</span>";
+      case 3:
+        return "<span class='badge bg-info'>Approved</span>";
+      case 4:
+        return "<span class='badge bg-dark'>Released</span>";
+    }
+  }
+
+
+//=============================================================================================================================================================================================
+
+      const utilAddScheduleToTable = (shortcode, description, value, state, action, scheduleID = 0) => {
+
+        let tr;
+        let td;
+    
+        var uiTblScheduleTableBody = document.getElementById("schedule-table-body");
+        tr = document.createElement("tr");
+        td = document.createElement("td");
+        td.innerHTML = shortcode;
+        tr.appendChild(td);
+        uiTblScheduleTableBody.appendChild(tr);
+    
+        td = document.createElement("td");
+        td.innerHTML = description;
+        tr.classList.add("table-active");
+        tr.appendChild(td);
+        uiTblScheduleTableBody.appendChild(tr);
+    
+        td = document.createElement("td");
+        td.innerHTML = value / 1000000000000000000;
+        td.classList.add('text-end');
+        tr.appendChild(td);
+    
+        td = document.createElement("td");
+        td.innerHTML = utilScheduleState(parseInt(state));
+        tr.appendChild(td);
+    
+        td = document.createElement("td");
+        //let client fund this if (a) it's the client (b) schedule is not funded (c) project is accepted
+        if (action === "client" && state == 0 && decenteeContractStatus == 1) {
+          td.innerHTML = '<button type="button" onclick="App.btnFundSchedule(' + value / 1000000000000000000 + ',' + scheduleID + ')" class="btn btn-primary btn-sm">Fund</button>';
+          td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-' + scheduleID + '"></span>';
+        }
+        else if (action === "mentor" && state == 1 && decenteeContractStatus == 1) {
+          td.innerHTML = '<button type="button" onclick="App.btnStartSchedule(' + scheduleID + ')" class="btn btn-success btn-sm">Start Work</button>';
+          td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-' + scheduleID + '"></span>';
+        }
+        else if (action === "client" && state == 2 && decenteeContractStatus == 1) {
+          td.innerHTML = '<button type="button" onclick="App.btnApproveSchedule(' + scheduleID + ')" class="btn btn-warning btn-sm">Approve</button>';
+          td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-' + scheduleID + '"></span>';
+        }
+        else if (action === "mentor" && state == 3 && decenteeContractStatus == 1) {
+          td.innerHTML = '<button type="button" onclick="App.btnReleaseFunds(' + scheduleID + ')" class="btn btn-info btn-sm">Release Funds</button>';
+          td.innerHTML += '<span class="spinner-border spinner-border-sm d-none" role="status" id="spn-schedule-action-' + scheduleID + '"></span>';
+        }
+    
+        tr.appendChild(td);
+    
+        uiTblScheduleTableBody.appendChild(tr);
+      }
+
+
+
+//=============================================================================================================================================================================================
+
+      const utilToggerActionBtns = async (who) => {
+        if (who == "mentor") {
+          var uiBtnAddSchedule = document.getElementById("btn-Add-Schedule");
+          var uiBtnEndProject = document.getElementById("btn-End-Project");
+    
+          await decentee.methods.projectState().call().then((result) => {
+    
+            console.log("326", result)
+    
+            if (result == 0) {
+              uiBtnAddSchedule.disabled = false;
+              uiBtnEndProject.disabled = true;
+            }
+            else if (result == 1) {
+              // this.uiLblTotalEth = document.getElementById("lbl-total-eth");
+              // this.uiLblDisbursedEth = document.getElementById("lbl-disbursed-eth");
+              console.log("T:" + this.uiLblTotalEth.innerHTML);
+              console.log("D:" + this.uiLblDisbursedEth.innerHTML);
+              if (uiLblTotalEth == uiLblDisbursedEth) {
+                uiBtnAddSchedule.disabled = true;
+                uiBtnEndProject.disabled = false;
+              }
+              else {
+                uiBtnAddSchedule.disabled = true;
+                uiBtnEndProject.disabled = true;
+              }
+            }
+            else if (result == 2) {
+              uiBtnAddSchedule.disabled = true;
+              uiBtnEndProject.disabled = true;
+            }
+          });
+        //  var uiBtnAcceptProject = document.getElementById("btn-Accept-Project");
+        //  console.log("btn-----"+uiBtnAcceptProject);
+          await decentee.methods.projectState().call().then((result) =>{
+            if (result == 0){
+             // uiBtnAcceptProject.disabled = false;
+            }
+            else if (result == 1){
+              //uiBtnAcceptProject.disabled = true;  
+            }
+            else if (result == 2){
+              //uiBtnAcceptProject.disabled = true;  
+            }
+          });
+    
+        }
+      }
+      
 
     // btnAcceptProject async function(){
     //     uiSpnContractAction = document.getElementById("spn-contract-action");
@@ -29,9 +259,8 @@ function Mentee() {
         // later on this can be simplified, for now Im just writing out the page.
 
             
-        <body>
-            <br />
-            <br />
+        <>
+           
 
             <div className="p-1 mb-1 bg-dark bg-gradient text-white rounded-3">
                 <div className="container-fluid py-3">
@@ -40,11 +269,11 @@ function Mentee() {
                     <div className="row">
                         <div className="col-8">
                             <div className="input-group input-group-lg">
-                                <input type="text" class="form-control" placeholder="Enter contract address" id="txt-contract-address"></input>
+                                <input type="text" class="form-control" placeholder="Enter contract address" id="txt-contract-address" onChange={getContractAddress}></input>
                             </div>
                         </div>
                         <div className="col-4">
-                            <button class="btn btn-primary btn-lg" onclick="App.btnGoClient()"
+                            <button class="btn btn-primary btn-lg" onClick={btnGoClient}
                                 type="button" id="btn-Deploy"
                                 data-bs-toggle="popover" title="Error"
                                 data-bs-content="Smart Contract Not Found"
@@ -103,7 +332,7 @@ function Mentee() {
                 <tbody id="schedule-table-body">
                 </tbody>
             </table>
-        </body>
+        </>
 
     )
 }

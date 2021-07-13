@@ -13,13 +13,13 @@ const Navbar = ({ account }) => {
           <svg width="195" height="74.77363865822332"  viewBox="0 0 369.7695137611495 107.91481797095986" className="css-1j8o68f">
             <defs id="SvgjsDefs1405">
               <linearGradient id="SvgjsLinearGradient1410">
-                <stop id="SvgjsStop1411" stop-color="#8f5e25" offset="0"></stop>
-                <stop id="SvgjsStop1412" stop-color="#fbf4a1" offset="0.5"></stop>
-                <stop id="SvgjsStop1413" stop-color="#8f5e25" offset="1"></stop>
+                <stop id="SvgjsStop1411" stopColor="#8f5e25" offset="0"></stop>
+                <stop id="SvgjsStop1412" stopColor="#fbf4a1" offset="0.5"></stop>
+                <stop id="SvgjsStop1413" stopColor="#8f5e25" offset="1"></stop>
               </linearGradient><linearGradient id="SvgjsLinearGradient1414">
-                <stop id="SvgjsStop1415" stop-color="#8f5e25" offset="0"></stop>
-                <stop id="SvgjsStop1416" stop-color="#fbf4a1" offset="0.5"></stop>
-                <stop id="SvgjsStop1417" stop-color="#8f5e25" offset="1"></stop>
+                <stop id="SvgjsStop1415" stopColor="#8f5e25" offset="0"></stop>
+                <stop id="SvgjsStop1416" stopColor="#fbf4a1" offset="0.5"></stop>
+                <stop id="SvgjsStop1417" stopColor="#8f5e25" offset="1"></stop>
               </linearGradient>
             </defs>
             <g id="SvgjsG1406" featurekey="hmhgWD-0" transform="matrix(0.12144681165584492,0,0,0.12144681165584492,-14.109724898167395,0.24007586876651388)" fill="url(#SvgjsLinearGradient1410)">

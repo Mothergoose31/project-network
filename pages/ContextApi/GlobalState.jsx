@@ -8,6 +8,10 @@ const GlobalProvider = ({ children }) => {
     const [contractAddresss, setContractAddresss] = useState("");
 
 
+
+    
+
+
     return (
        <GlobalContext.Provider value={{contractAddresss, setContractAddresss}}>
            {children}
