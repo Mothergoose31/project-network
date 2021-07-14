@@ -87,7 +87,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     // Global Provider is a wrapper that gives global state to every page and component inside the next js app from ContextApi.jsx
-    <GlobalProvider>
+    <GlobalProvider  decentee={decentee} account={account}>
 
       <Navbar account={account} className={styles.navbar} />
       <br />

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { GlobalContext } from './ContextApi/GlobalState'
 import DecenteeArtifact from './abis/Decentee.json'
 
-import { utilToggerAllButtonOnOff } from "./components/Global-Functions.js"
+
 
 function Mentee() {
 
@@ -22,6 +22,10 @@ function Mentee() {
 
     const getContractAddress = (e) => {
 
+        var length = e.target.value.trim().length
+
+        //length == 42 ? setContractAddress(e.target.value.trim()) : console.log("need to be 42")
+        
         setContractAddress(e.target.value.trim())
     
       }
@@ -34,31 +38,20 @@ function Mentee() {
       const btnGoClient = () => {
        
         //this.uiBtnDeployPopover.hide();
+
         
-        if (contractAddress === ""){
+        
+        if (contractAddress.length === 42){
+            console.log("hello")
           //this.uiBtnDeployPopover.show();
-        }
-        else{
-             var freelanceContractAddress = contractAddress;
+          var freelanceContractAddress = contractAddress;
           var freelancerContract = new web3.eth.Contract(DecenteeArtifact.abi, freelanceContractAddress);
           retrieveFreelancer(contractAddress, "client");
         }
+        else{
+            alert("smart contract noy found!")
+        }
       }
-
-
-
-
-    //   btnGo: function(){
-    //     this.uiBtnDeployPopover.hide();
-    
-    //     this.uiTxtContractAddress = document.getElementById("txt-contract-address").value;
-    //     if (this.uiTxtContractAddress === ""){
-    //       this.deployFreelancer();
-    //     }
-    //     else {
-    //         this.retrieveFreelancer(this.uiTxtContractAddress);  
-    //     }
-    //   },
 
 
 
@@ -76,6 +69,10 @@ function Mentee() {
           //this.uiBtnDeployPopover.show();
         }
       }
+
+
+
+
 
 //=============================================================================================================================================================================================
 
