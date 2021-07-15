@@ -49,13 +49,13 @@ const Home = ({ account, decentee, loading }) => {
                   <a className={styles.card}>
                     Mentor
                     <h2>Mentor &rarr;</h2>
-                    <p>Find in-depth information about Next.js features and API.</p>
+                    <p>Be a Mentor! Earn & learn.</p>
                   </a>
                 </Link>
                 <Link href="/Mentee">
                 <a  className={styles.card}>
                   <h2>Mentee &rarr;</h2>
-                  <p>Learn about Next.js in an interactive course with quizzes!</p>
+                  <p>Find your next Mentor. Decentee Mentee the future is here!</p>
                 </a>
                 </Link>
             </div>
