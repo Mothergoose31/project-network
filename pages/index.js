@@ -62,22 +62,19 @@ const Home = ({ account, decentee, loading }) => {
               A Decentralized Hub for Mentors and Mentees To Connect and learn
             </div>
 
-            <div className={styles.grid}>
-              <Link href="/Mentor">
-                <a className={styles.card}>
-                  Mentor
-                  <h2>Mentor &rarr;</h2>
-                  <p>
-                    Find in-depth information about Next.js features and API.
-                  </p>
-                </a>
-              </Link>
-              <Link href="/Mentee">
-                <a className={styles.card}>
+
+              <div className={styles.grid}>
+                <Link href="/Mentor">
+                  <a className={styles.card}>
+                    Mentor
+                    <h2>Mentor &rarr;</h2>
+                    <p>Be a Mentor! Earn & learn.</p>
+                  </a>
+                </Link>
+                <Link href="/Mentee">
+                <a  className={styles.card}>
                   <h2>Mentee &rarr;</h2>
-                  <p>
-                    Learn about Next.js in an interactive course with quizzes!
-                  </p>
+                  <p>Find your next Mentor. Decentee Mentee the future is here!</p>
                 </a>
               </Link>
             </div>

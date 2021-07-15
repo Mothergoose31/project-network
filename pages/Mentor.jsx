@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head'
 import Web3 from 'web3';
@@ -545,8 +544,8 @@ const Mentor = ({ }) => {
       </Head>
       <div className="p-1 mb-1 bg-light bg-gradient rounded-3">
         <div className="container-fluid py-3">
-          <h1 className="display-7 fw-bold">Coaching Smart Contract</h1>
-          <p className="col-md-8 fs-4">This is the freelancer's Distributed App</p>
+          <h1 className="display-7 fw-bold">Mentor Smart Contract</h1>
+          <p className="col-md-8 fs-4">This is the Decentee Mentee Distributed App</p>
           <div className="row">
             <div className="col-8">
               <div className="input-group input-group-lg">
